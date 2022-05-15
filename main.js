@@ -50,7 +50,7 @@ function hitMe(currentCards) {
 }
 
 function stay() {
-
+    
 }
 
 function dealerhand() {

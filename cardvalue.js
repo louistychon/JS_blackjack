@@ -45,4 +45,4 @@ function cardvalue(currentCards) {
     }
 }
 
-console.log(cardvalue([10,9,8,"K"]))
+console.log(cardvalue())

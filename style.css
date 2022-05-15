@@ -114,3 +114,24 @@ body {
 	border-radius: 10px;
 	border: double 5px;
 }
+
+.flex {
+	display:flex;
+	justify-content: space-evenly;
+}
+
+.flex > div{
+	background-color: black;
+	color:white;
+	padding: 2px;
+	margin-top: 5px;
+}
+
+.flex > div p{
+	margin-block-start: 0;
+	margin-block-end: 0;
+}
+
+.flex > div img{
+	width: 100px
+}

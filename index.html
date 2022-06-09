@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-	<!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
 	<div class="game">
 		<h3>Blackjack</h3>
-
-		<div class="game-body">
+		<div class="game-body" id="game-body">
 			<div class="game-options">
-				<input type="button" id="btnStart" class="btn" value="start" onclick="newDeck()">
-				<input type="button" class="btn" value="hitme" onclick="hitMe(currentCards)">
-				<input type="button" class="btn" value="stay" onclick="stay()">
+				<input type="button" id="btnStart" class="btn" value="start" visibility>
+				<input type="button" class="btn" id="btnHitMe" value="hitme">
+				<input type="button" class="btn" id="btnStay" value="stay">
 			</div>
 
 			<div class="status" id="status"></div>
@@ -26,18 +24,16 @@
 			<div id="deck" class="deck">
 				<div id="deckcount">52</div>
 			</div>
-
+			
 			<div class="flex">
-			<div id="player1"><p>Player</p>
-				<img id="carte1" src="img/2coeur.png">
-				<img id="carte2" src="img/3coeur.png">
+				<div id="player">
+					<p>Player</p>
+				</div>
+				<div id="dealer">
+					<p>Dealer</p>
+				</div>
 			</div>
-			<div id="dealer"><p>Dealer</p>
-			<img id="carte3" src="img/2coeur.png">
-			<img id="carte4"src="img/3coeur.png">
-		</div>
-		</div>
 		</div>
 	</div>
-	<script src="main.js" async defer></script>
+	<script src="main.js" type="module" async defer></script>
 </body>

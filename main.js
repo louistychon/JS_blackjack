@@ -1,60 +1,166 @@
-var suits = ["Pique", "Coeur", "Treffle", "Carreau"];
-var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
-var currentPlayer = 0;
-let cardOneID, cardTwoID = 0,
-    cardThreeID = 0,
-    cardFourID = 0,
-    cardfiveID, cardsixID, cardsevenID, cardeightID;
-let cards = [cardOneID, cardTwoID, cardThreeID, cardFourID, cardfiveID, cardsixID, cardsevenID, cardeightID];
-let currentCards = [
-    [],
-    [],
-];
+import {
+    cardvalue
+} from "./cardvalue.js"
+import {
+    cardToDisplay
+} from "./imglink.js"
 
+let suits = ["Pique", "Coeur", "Treffle", "Carreau"];
+let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
+let currentCards = [];
+let allcards = [];
+let currentCardsdealer = [];
+
+
+
+//select items
+let btnStart = document.getElementById('btnStart')
+let btnHitMe = document.getElementById('btnHitMe')
+let player = document.getElementById('player')
+let dealer = document.getElementById('dealer')
+let div = document.createElement('div')
+let pplayer = document.createElement('p')
+let pdealer = document.createElement('p')
+let victory = document.createElement('p')
+let game = document.getElementById('game-body')
+
+//full the allcards variable with all existing cards
+for (let i = 0; i < suits.length; i++) {
+    for (let j = 0; j < values.length; j++) {
+        allcards.push(values[j] + " de " + suits[i]);
+    }
+}
+
+console.log(allcards)
+
+//to randomise all functions in this game
 function random(table) {
     return table[Math.floor(Math.random() * table.length)]
 }
 
-//function that sets up the initial deck
+//set up the initial deck
 
-function newDeck() {
-    //define random cards & suits
-    cardOneID = random(values);
-    cardOneSuits = random(suits);
-    cardTwoID = random(values);
-    cardTwoSuits = random(suits);
+btnStart.addEventListener('click', () => {
+    btnHitMe.style.display = ''
+    btnStay.style.display = ''
+    currentCards = []
     //push cards into currentcards
-    if (currentCards[0].length == 0) {
-        //if there are no cars in currentcards = game initialisation
-        currentCards[0].push(cardOneID, cardOneSuits);
-        currentCards[1].push(cardTwoID, cardTwoSuits);
-        console.table(currentCards);
-    } else {
+    if (currentCards.length == 0) {
+        //if there are no cards in currentcards = game initialisation
+        //define 2 random cards from the whole deck
+        for (let index = 0; index < 2; index++) {
+            currentCards.push(random(allcards))
+            cardToDisplay(currentCards[index], player)
+        }
+        console.log(currentCards); //visualise cards
+        pplayer.innerHTML = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
+        player.appendChild(pplayer)
+
+    } else if (currentCards.length > 0) {
         //if there are cards in currentcards = game restart
         //remove the currentcards from the deck
-        currentCards = [[],[]];
+        currentCards = [];
         //push 2 new cards
-        currentCards[0].push(cardOneID, cardOneSuits), currentCards[1].push(cardTwoID, cardTwoSuits);
-
-        console.table(currentCards);
+        for (let index = 0; index < 2; index++) {
+            currentCards.push(random(allcards))
+        }
+        console.log(currentCards);
         //display cards in HTML
-
     }
+})
 
-}
+let scorefinal = 0;
 //click on hitMe button
-function hitMe(currentCards) {
-    x = [random(values),random(suits)]
+btnHitMe.addEventListener('click', () => {
+    let score = []
+    let x = random(allcards)
     currentCards.push(x)
-    console.table(currentCards);
-}
+    cardToDisplay(x, player)
+    for (let index = 0; index < currentCards.length; index++) {
+        score.push(cardvalue(currentCards[index]))
+        console.log(score)
+    }
+    for (let index = 0; index < score.length; index++) {
+        scorefinal += score[index]
+    }
+    console.log(scorefinal)
+    if (scorefinal < 21) {
+        console.log("vous avez encore la possibilité de tirer une carte")
+    } else if (scorefinal == 21) {
+        btnHitMe.style.display = "none"
+        console.log("vous avez gagné !")
+    } else {
+        btnHitMe.style.display = "none"
+        console.log("vous avez perdu !!!")
+    }
+    pplayer.innerHTML = scorefinal
+})
 
-function stay() {
+let scoredealertable = [];
+let scoredealer = 0;
+btnStay.addEventListener("click", () => {
+    //push de 2 cartes dans currentCardsdealer
+    for (let index = 0; index < 2; index++) {
+        currentCardsdealer.push(random(allcards))
+        scoredealertable.push(cardvalue(currentCardsdealer[index]))
+        cardToDisplay(currentCardsdealer[index], dealer)
+    }
+    console.log("dealer " + currentCardsdealer)
     
+    for (let index = 0; index < scoredealertable.length; index++) {
+        scoredealer += scoredealertable[index]
+    }
+    console.log(scoredealer)
+    console.log(scorefinal)
+    
+    //if score lower than x, then dealers draws one more card, else he stays
+
+    if(scoredealer < 16){
+        currentCardsdealer.push(random(allcards))
+        scoredealertable.push(cardvalue(currentCardsdealer[2]))
+        scoredealer += scoredealertable[2]
+        cardToDisplay(currentCardsdealer[2], dealer)
+    }
+    else{
+        console.log("dealer stays with the score " + scoredealer)
+        btnStay.style.display = "none"
+    }
+    pdealer.innerHTML = scoredealer
+    dealer.appendChild(pdealer)
+    definewinner(scorefinal, scoredealer)
+})
+
+
+function definewinner(scorefinal, scoredealer) {
+    if (scorefinal == 21){
+        victory.innerHTML = "Le joueur a gagné !"
+    }
+    else if(scoredealer == 21){
+        victory.innerHTML = "Le dealer a gagné !"
+    }
+    else if(scorefinal == scoredealer){
+        victory.innerHTML = "Egalité !"
+    }
+    else if(scorefinal > 21 && scoredealer < 21){
+        victory.innerHTML = "Le joueur perd et le dealer gagne !"
+    }
+    else if (scorefinal > 21 && scoredealer > 21){
+        victory.innerHTML = "Le dealer et le joueur perdent, le casino raffle la mise !"
+    }
+    else if (scorefinal < 21 && scoredealer > 21){
+        victory.innerHTML = "Le dealer perd et le joueur gagne !"
+    }
+    else if (scorefinal < 21 && scorefinal > scoredealer){
+        victory.innerHTML = "Le joueur a gagné !"
+    }
+    else if (scoredealer < 21 && scoredealer > scorefinal){
+        victory.innerHTML = "Le dealer a gagné !"
+    }
+    else {
+        victory.innerHTML = "C'est bizarre !"
+    }
+    victory.style.color = "white"
+    game.appendChild(victory)
 }
 
-function dealerhand() {
-
-}
-
-window.onload = newDeck();
+export {allcards}

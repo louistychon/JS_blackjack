@@ -19,7 +19,6 @@ let btnHitMe = document.getElementById('btnHitMe')
 let player = document.getElementById('player')
 let dealer = document.getElementById('dealer')
 let game = document.getElementById('game-body')
-let div = document.createElement('div')
 let pplayer = document.createElement('p')
 let pdealer = document.createElement('p')
 let victory = document.createElement('p')
@@ -36,25 +35,24 @@ function random(table) {
     return table[Math.floor(Math.random() * table.length)]
 }
 
-//set up the initial deck
+//initialisation of the scorefinal variable
 let scorefinal;
 
 btnStart.addEventListener('click', () => {
     btnHitMe.style.display = ''
     btnStay.style.display = ''
     currentCards = []
-    //push cards into currentcards
     if (currentCards.length == 0) {
         //if there are no cards in currentcards = game initialisation
         //define 2 random cards from the whole deck
         for (let index = 0; index < 2; index++) {
+            //push cards into currentcards
             currentCards.push(random(allcards))
+            //display the cards in the player's deck/div
             cardToDisplay(currentCards[index], player)
         }
-        console.log(currentCards); //visualise cards
         pplayer.innerHTML = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
         scorefinal = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
-
     } else if (currentCards.length > 0) {
         //if there are cards in currentcards = game restart
         //remove the currentcards from the deck
@@ -77,20 +75,15 @@ btnHitMe.addEventListener('click', () => {
     cardToDisplay(x, player)
     for (let index = 0; index < currentCards.length; index++) {
         score.push(cardvalue(currentCards[index]))
-        console.log(score)
     }
     for (let index = 0; index < score.length; index++) {
         scorefinal += score[index]
     }
-    console.log(scorefinal)
-    if (scorefinal < 21) {
-        console.log("vous avez encore la possibilité de tirer une carte")
-    } else if (scorefinal == 21) {
+
+    if (scorefinal < 21) {} else if (scorefinal == 21) {
         btnHitMe.style.display = "none"
-        console.log("vous avez gagné !")
     } else {
         btnHitMe.style.display = "none"
-        console.log("vous avez perdu !!!")
     }
     pplayer.innerHTML = scorefinal
 })
@@ -105,58 +98,46 @@ btnStay.addEventListener("click", () => {
         scoredealertable.push(cardvalue(currentCardsdealer[index]))
         cardToDisplay(currentCardsdealer[index], dealer)
     }
-    console.log("dealer " + currentCardsdealer)
-    
+
     for (let index = 0; index < scoredealertable.length; index++) {
         scoredealer += scoredealertable[index]
     }
-    console.log(scoredealer)
-    console.log(scorefinal)
-    
-    //if score lower than x, then dealers draws one more card, else he stays
 
-    if(scoredealer < 16){
-        currentCardsdealer.push(random(allcards))
-        scoredealertable.push(cardvalue(currentCardsdealer[2]))
-        scoredealer += scoredealertable[2]
-        cardToDisplay(currentCardsdealer[2], dealer)
+    //if score lower than x, then dealers draws one more card, else he stays
+    let newcard
+    do {
+        newcard = random(allcards)
+        currentCardsdealer.push(newcard)
+        scoredealertable.push(cardvalue(newcard))
+        scoredealer += cardvalue(newcard)
+        cardToDisplay(newcard, dealer)
     }
-    else{
-        console.log("dealer stays with the score " + scoredealer)
-        btnStay.style.display = "none"
-    }
+    while (scoredealer < 16)
+
     pdealer.innerHTML = scoredealer
     definewinner(scorefinal, scoredealer)
 })
 
 
 function definewinner(scorefinal, scoredealer) {
-    if (scorefinal == 21){
-        victory.innerHTML = "Le joueur a gagné !"
-    }
-    else if(scoredealer == 21){
-        victory.innerHTML = "Le dealer a gagné !"
-    }
-    else if(scorefinal == scoredealer){
-        victory.innerHTML = "Egalité !"
-    }
-    else if(scorefinal > 21 && scoredealer < 21){
-        victory.innerHTML = "Le joueur perd et le dealer gagne !"
-    }
-    else if (scorefinal > 21 && scoredealer > 21){
-        victory.innerHTML = "Le dealer et le joueur perdent, le casino raffle la mise !"
-    }
-    else if (scorefinal < 21 && scoredealer > 21){
-        victory.innerHTML = "Le dealer perd et le joueur gagne !"
-    }
-    else if (scorefinal < 21 && scorefinal > scoredealer){
-        victory.innerHTML = "Le joueur a gagné !"
-    }
-    else if (scoredealer < 21 && scoredealer > scorefinal){
-        victory.innerHTML = "Le dealer a gagné !"
-    }
-    else {
-        victory.innerHTML = "C'est bizarre !"
+    if (scorefinal == 21) {
+        victory.innerHTML = "The player wins!"
+    } else if (scoredealer == 21) {
+        victory.innerHTML = "Le dealer wins!"
+    } else if (scoredealer < 21 && scorefinal < 21 && scorefinal == scoredealer) {
+        victory.innerHTML = "Tie game !"
+    } else if (scorefinal > 21 && scoredealer < 21) {
+        victory.innerHTML = "The player loses and the dealer wins!"
+    } else if (scorefinal > 21 && scoredealer > 21) {
+        victory.innerHTML = "The dealer and the player lose, the money is for the casino!"
+    } else if (scorefinal < 21 && scoredealer > 21) {
+        victory.innerHTML = "The dealer loses and the player wins!"
+    } else if (scorefinal < 21 && scorefinal > scoredealer) {
+        victory.innerHTML = "The player wins!"
+    } else if (scoredealer < 21 && scoredealer > scorefinal) {
+        victory.innerHTML = "The dealer wins!"
+    } else {
+        victory.innerHTML = "It's weird !"
     }
     victory.style.color = "white"
     game.appendChild(victory)
@@ -165,4 +146,6 @@ function definewinner(scorefinal, scoredealer) {
 player.appendChild(pplayer)
 dealer.appendChild(pdealer)
 
-export {allcards}
+export {
+    allcards
+}

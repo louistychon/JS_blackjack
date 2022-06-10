@@ -105,14 +105,13 @@ btnStay.addEventListener("click", () => {
 
     //if score lower than x, then dealers draws one more card, else he stays
     let newcard
-    do {
+    while (scoredealer < 14){
         newcard = random(allcards)
         currentCardsdealer.push(newcard)
         scoredealertable.push(cardvalue(newcard))
         scoredealer += cardvalue(newcard)
         cardToDisplay(newcard, dealer)
     }
-    while (scoredealer < 16)
 
     pdealer.innerHTML = scoredealer
     definewinner(scorefinal, scoredealer)

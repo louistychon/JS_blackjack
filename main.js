@@ -39,6 +39,7 @@ function random(table) {
 }
 
 //set up the initial deck
+let scorefinal;
 
 btnStart.addEventListener('click', () => {
     btnHitMe.style.display = ''
@@ -54,6 +55,7 @@ btnStart.addEventListener('click', () => {
         }
         console.log(currentCards); //visualise cards
         pplayer.innerHTML = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
+        scorefinal = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
         player.appendChild(pplayer)
 
     } else if (currentCards.length > 0) {
@@ -69,9 +71,9 @@ btnStart.addEventListener('click', () => {
     }
 })
 
-let scorefinal = 0;
 //click on hitMe button
 btnHitMe.addEventListener('click', () => {
+    scorefinal = 0;
     let score = []
     let x = random(allcards)
     currentCards.push(x)
@@ -96,9 +98,10 @@ btnHitMe.addEventListener('click', () => {
     pplayer.innerHTML = scorefinal
 })
 
-let scoredealertable = [];
-let scoredealer = 0;
+let scoredealer;
 btnStay.addEventListener("click", () => {
+    let scoredealertable = [];
+    scoredealer = 0;
     //push de 2 cartes dans currentCardsdealer
     for (let index = 0; index < 2; index++) {
         currentCardsdealer.push(random(allcards))

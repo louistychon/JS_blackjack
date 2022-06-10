@@ -18,11 +18,11 @@ let btnStart = document.getElementById('btnStart')
 let btnHitMe = document.getElementById('btnHitMe')
 let player = document.getElementById('player')
 let dealer = document.getElementById('dealer')
+let game = document.getElementById('game-body')
 let div = document.createElement('div')
 let pplayer = document.createElement('p')
 let pdealer = document.createElement('p')
 let victory = document.createElement('p')
-let game = document.getElementById('game-body')
 
 //full the allcards variable with all existing cards
 for (let i = 0; i < suits.length; i++) {
@@ -30,8 +30,6 @@ for (let i = 0; i < suits.length; i++) {
         allcards.push(values[j] + " de " + suits[i]);
     }
 }
-
-console.log(allcards)
 
 //to randomise all functions in this game
 function random(table) {
@@ -56,7 +54,6 @@ btnStart.addEventListener('click', () => {
         console.log(currentCards); //visualise cards
         pplayer.innerHTML = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
         scorefinal = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
-        player.appendChild(pplayer)
 
     } else if (currentCards.length > 0) {
         //if there are cards in currentcards = game restart
@@ -129,7 +126,6 @@ btnStay.addEventListener("click", () => {
         btnStay.style.display = "none"
     }
     pdealer.innerHTML = scoredealer
-    dealer.appendChild(pdealer)
     definewinner(scorefinal, scoredealer)
 })
 
@@ -165,5 +161,8 @@ function definewinner(scorefinal, scoredealer) {
     victory.style.color = "white"
     game.appendChild(victory)
 }
+
+player.appendChild(pplayer)
+dealer.appendChild(pdealer)
 
 export {allcards}

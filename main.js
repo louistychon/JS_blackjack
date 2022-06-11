@@ -11,8 +11,6 @@ let currentCards = [];
 let allcards = [];
 let currentCardsdealer = [];
 
-
-
 //select items
 let btnStart = document.getElementById('btnStart')
 let btnHitMe = document.getElementById('btnHitMe')
@@ -22,6 +20,9 @@ let game = document.getElementById('game-body')
 let pplayer = document.createElement('p')
 let pdealer = document.createElement('p')
 let victory = document.createElement('p')
+
+btnHitMe.style.display = 'none'
+btnStay.style.display = 'none'
 
 //full the allcards variable with all existing cards
 for (let i = 0; i < suits.length; i++) {
@@ -41,7 +42,8 @@ let scorefinal;
 btnStart.addEventListener('click', () => {
     btnHitMe.style.display = ''
     btnStay.style.display = ''
-    currentCards = []
+    game.removeChild(game.lastChild)
+    restart()
     if (currentCards.length == 0) {
         //if there are no cards in currentcards = game initialisation
         //define 2 random cards from the whole deck
@@ -87,11 +89,11 @@ btnHitMe.addEventListener('click', () => {
     }
     pplayer.innerHTML = scorefinal
 })
-
 let scoredealer;
 btnStay.addEventListener("click", () => {
     let scoredealertable = [];
     scoredealer = 0;
+    dealer.appendChild(pdealer)
     //push de 2 cartes dans currentCardsdealer
     for (let index = 0; index < 2; index++) {
         currentCardsdealer.push(random(allcards))
@@ -105,7 +107,7 @@ btnStay.addEventListener("click", () => {
 
     //if score lower than x, then dealers draws one more card, else he stays
     let newcard
-    while (scoredealer < 14){
+    while (scoredealer < 14) {
         newcard = random(allcards)
         currentCardsdealer.push(newcard)
         scoredealertable.push(cardvalue(newcard))
@@ -117,34 +119,70 @@ btnStay.addEventListener("click", () => {
     definewinner(scorefinal, scoredealer)
 })
 
+let victoriesplayer = 0;
+let victoriesdealer = 0;
+
+let pvictoryplayer = document.createElement('p')
+let pvictorydealer = document.createElement('p')
 
 function definewinner(scorefinal, scoredealer) {
     if (scorefinal == 21) {
         victory.innerHTML = "The player wins!"
+        victoriesplayer += 1
     } else if (scoredealer == 21) {
-        victory.innerHTML = "Le dealer wins!"
+        victory.innerHTML = "The dealer wins!"
+        victoriesdealer += 1
     } else if (scoredealer < 21 && scorefinal < 21 && scorefinal == scoredealer) {
         victory.innerHTML = "Tie game !"
     } else if (scorefinal > 21 && scoredealer < 21) {
         victory.innerHTML = "The player loses and the dealer wins!"
+        victoriesdealer += 1
     } else if (scorefinal > 21 && scoredealer > 21) {
         victory.innerHTML = "The dealer and the player lose, the money is for the casino!"
     } else if (scorefinal < 21 && scoredealer > 21) {
         victory.innerHTML = "The dealer loses and the player wins!"
+        victoriesplayer += 1
     } else if (scorefinal < 21 && scorefinal > scoredealer) {
         victory.innerHTML = "The player wins!"
+        victoriesplayer += 1
     } else if (scoredealer < 21 && scoredealer > scorefinal) {
         victory.innerHTML = "The dealer wins!"
+        victoriesdealer += 1
     } else {
         victory.innerHTML = "It's weird !"
     }
+    btnHitMe.style.display = "none"
+    btnStay.style.display = "none"
     victory.style.color = "white"
     game.appendChild(victory)
 }
 
+pvictoryplayer.innerHTML = "Victories player : " + victoriesplayer
+pvictorydealer.innerHTML = "Victories dealer : " + victoriesdealer
+
 player.appendChild(pplayer)
 dealer.appendChild(pdealer)
+player.appendChild(pvictoryplayer)
+dealer.appendChild(pvictorydealer)
 
 export {
     allcards
 }
+
+function restart() {
+    //empty the table with the cards
+    currentCards = []
+    //remove the images of cards on player side
+    while (player.firstChild) {
+        player.removeChild(player.firstChild)
+    }
+    //remove images of cards on opponent side
+    while (dealer.firstChild) {
+        dealer.removeChild(dealer.firstChild)
+    }
+
+    //re append the paragraph displaying score of the player
+    player.appendChild(pplayer)
+}
+
+window.onload = restart()

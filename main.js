@@ -44,9 +44,6 @@ btnStart.addEventListener('click', () => {
     btnStay.style.display = ''
     game.removeChild(game.lastChild)
     restart()
-    if (currentCards.length == 0) {
-        //if there are no cards in currentcards = game initialisation
-        //define 2 random cards from the whole deck
         for (let index = 0; index < 2; index++) {
             //push cards into currentcards
             currentCards.push(random(allcards))
@@ -55,19 +52,39 @@ btnStart.addEventListener('click', () => {
         }
         pplayer.innerHTML = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
         scorefinal = cardvalue(currentCards[0]) + cardvalue(currentCards[1]);
-    } else if (currentCards.length > 0) {
-        //if there are cards in currentcards = game restart
-        //remove the currentcards from the deck
-        currentCards = [];
-        //push 2 new cards
-        for (let index = 0; index < 2; index++) {
-            currentCards.push(random(allcards))
-        }
         console.log(currentCards);
         //display cards in HTML
-    }
 })
 
+btnStay.addEventListener("click", () => {
+    let scoredealertable = [];
+    scoredealer = 0;
+    dealer.appendChild(pdealer)
+    //push de 2 cartes dans currentCardsdealer
+    for (let index = 0; index < 2; index++) {
+        currentCardsdealer.push(random(allcards))
+        scoredealertable.push(cardvalue(currentCardsdealer[index]))
+        cardToDisplay(currentCardsdealer[index], dealer)
+    }
+    
+    for (let index = 0; index < scoredealertable.length; index++) {
+        scoredealer += scoredealertable[index]
+    }
+    
+    //if score lower than x, then dealers draws one more card, else he stays
+    let newcard
+    while (scoredealer < 14) {
+        newcard = random(allcards)
+        currentCardsdealer.push(newcard)
+        scoredealertable.push(cardvalue(newcard))
+        scoredealer += cardvalue(newcard)
+        cardToDisplay(newcard, dealer)
+    }
+    
+    pdealer.innerHTML = scoredealer
+    definewinner(scorefinal, scoredealer)
+    
+})
 //click on hitMe button
 btnHitMe.addEventListener('click', () => {
     scorefinal = 0;
@@ -81,7 +98,7 @@ btnHitMe.addEventListener('click', () => {
     for (let index = 0; index < score.length; index++) {
         scorefinal += score[index]
     }
-
+    
     if (scorefinal < 21) {} else if (scorefinal == 21) {
         btnHitMe.style.display = "none"
     } else {
@@ -90,42 +107,13 @@ btnHitMe.addEventListener('click', () => {
     pplayer.innerHTML = scorefinal
 })
 let scoredealer;
-btnStay.addEventListener("click", () => {
-    let scoredealertable = [];
-    scoredealer = 0;
-    dealer.appendChild(pdealer)
-    //push de 2 cartes dans currentCardsdealer
-    for (let index = 0; index < 2; index++) {
-        currentCardsdealer.push(random(allcards))
-        scoredealertable.push(cardvalue(currentCardsdealer[index]))
-        cardToDisplay(currentCardsdealer[index], dealer)
-    }
 
-    for (let index = 0; index < scoredealertable.length; index++) {
-        scoredealer += scoredealertable[index]
-    }
 
-    //if score lower than x, then dealers draws one more card, else he stays
-    let newcard
-    while (scoredealer < 14) {
-        newcard = random(allcards)
-        currentCardsdealer.push(newcard)
-        scoredealertable.push(cardvalue(newcard))
-        scoredealer += cardvalue(newcard)
-        cardToDisplay(newcard, dealer)
-    }
-
-    pdealer.innerHTML = scoredealer
-    definewinner(scorefinal, scoredealer)
-})
-
-let victoriesplayer = 0;
-let victoriesdealer = 0;
-
-let pvictoryplayer = document.createElement('p')
-let pvictorydealer = document.createElement('p')
-
+let victoriesplayer = 0
+let victoriesdealer = 0
 function definewinner(scorefinal, scoredealer) {
+    let pvictoryplayer = document.createElement('p')
+    let pvictorydealer = document.createElement('p')
     if (scorefinal == 21) {
         victory.innerHTML = "The player wins!"
         victoriesplayer += 1
@@ -154,16 +142,13 @@ function definewinner(scorefinal, scoredealer) {
     btnHitMe.style.display = "none"
     btnStay.style.display = "none"
     victory.style.color = "white"
-    game.appendChild(victory)
+    pvictoryplayer.innerHTML = "Victories : " + victoriesplayer
+    pvictorydealer.innerHTML = "Victories : " + victoriesdealer
+    console.log(pvictorydealer, pvictoryplayer)
+    dealer.appendChild(pvictorydealer)
+    player.appendChild(pvictoryplayer)
 }
 
-pvictoryplayer.innerHTML = "Victories player : " + victoriesplayer
-pvictorydealer.innerHTML = "Victories dealer : " + victoriesdealer
-
-player.appendChild(pplayer)
-dealer.appendChild(pdealer)
-player.appendChild(pvictoryplayer)
-dealer.appendChild(pvictorydealer)
 
 export {
     allcards
@@ -180,9 +165,8 @@ function restart() {
     while (dealer.firstChild) {
         dealer.removeChild(dealer.firstChild)
     }
-
+    
     //re append the paragraph displaying score of the player
     player.appendChild(pplayer)
 }
-
-window.onload = restart()
+game.appendChild(victory)

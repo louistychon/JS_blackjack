@@ -50,6 +50,8 @@ btnStart.addEventListener('click', () => {
     //when the game starts we show buttons
     btnHitMe.style.display = ''
     btnStay.style.display = ''
+    //but we remove the start button to avoid fraud
+    btnStart.style.display = 'none'
 
     //push cards into currentcards
     for (let index = 0; index < 2; index++) {
@@ -148,6 +150,7 @@ function definewinner(scorefinal, scoredealer) {
     dealer.appendChild(pvictorydealer)
     player.appendChild(pvictoryplayer)
     game.appendChild(victory)
+    btnStart.style.display = ''
 }
 
 
